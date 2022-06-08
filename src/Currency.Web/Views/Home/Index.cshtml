@@ -1,5 +1,4 @@
-﻿@using Currency.Services;
-@model ConversionRequest
+﻿@model ConversionRequest
 @{
     ViewData["Title"] = "Home Page";
     var content = (double)ViewBag.Content;
@@ -45,21 +44,23 @@
     </div>
     <div class="row">
         <div class="col-md-8 offset-2">
-                <div class="card shadow">
-                    <div class="card-body">
-                        @if (Model.HasError)
-                        {
-                            <div class="alert alert-danger">
-                                <h4>Something went wrong, Check the input values! If they are Ok, Sorry There is not enough information in the list</h4>
-                            </div>
-                        }
-                        else
-                        {
-                            <h1>@content @Model.To</h1>
-                        }
-                    </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    @if (Model.HasError)
+                    {
+                        <div class="alert alert-danger">
+                            <h4>
+                                Something went wrong, Check the input values!
+                                <br /> If they are OK. Sorry, conversion is not possible.
+                            </h4>
+                        </div>
+                    }
+                    else
+                    {
+                        <h1>@content @Model.To</h1>
+                    }
                 </div>
-
+            </div>
         </div>
     </div>
 </div>

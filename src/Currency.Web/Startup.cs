@@ -36,7 +36,7 @@ namespace Currency.Web
 
             services.AddControllersWithViews();
 
-            services.AddScoped<IGraphProcess, GraphProcess>();
+            services.AddScoped<IGraphProcessing, GraphProcessing>();
             services.AddScoped<ICurrencyConverter, CurrencyConverter>();
             
         }

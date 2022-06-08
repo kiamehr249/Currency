@@ -7,9 +7,9 @@ namespace Currency.Services
     public class CurrencyConverter : ICurrencyConverter
     {
         private IEnumerable<Tuple<string, string, double>> _conversionRates;
-        private readonly IGraphProcess _iGraphProcess;
+        private readonly IGraphProcessing _iGraphProcess;
 
-        public CurrencyConverter(IGraphProcess iGraphProcess)
+        public CurrencyConverter(IGraphProcessing iGraphProcess)
         {
             _conversionRates = new List<Tuple<string, string, double>>();
             _iGraphProcess = iGraphProcess;
@@ -27,30 +27,31 @@ namespace Currency.Services
 
         public double Convert(string fromCurrency, string toCurrency, double amount)
         {
-            if(string.IsNullOrEmpty(fromCurrency) || string.IsNullOrEmpty(toCurrency))
+            //check parameters value
+            if (string.IsNullOrEmpty(fromCurrency) || string.IsNullOrEmpty(toCurrency) || amount == 0)
             {
                 return 0;
             }
 
-            fromCurrency = fromCurrency.ToUpper();
-            toCurrency = toCurrency.ToUpper();
-
-            //Get Ready Vertices
+            //get ready vertices
             var vertices = new List<string>();
-            var list1 = _conversionRates.Select(x => x.Item1).ToList();
-            var list2 = _conversionRates.Select(x => x.Item2).ToList();
-            vertices = list1.Concat(list2).Distinct().ToList();
+            var leftSides = _conversionRates.Select(x => x.Item1).ToList();
+            var rightSides = _conversionRates.Select(x => x.Item2).ToList();
+            vertices = leftSides.Concat(rightSides).Distinct().ToList();
 
-            //Graph Generation
+            if (!vertices.Contains(toCurrency))
+                return 0;
+
+            //making graph
             var graph = new Graph(vertices, _conversionRates);
 
-            //Find short path between currencies
+            //find short path between target currencies
             var shortestPath = _iGraphProcess.ShortestPathFunc(graph, fromCurrency);
             var path = shortestPath(toCurrency).ToList();
 
-            //Final Exchange Rate Conversion
+            //final exchange rate conversion
             double rate = 1;
-            for(var i = 0; i < (path.Count -1); i++)
+            for (var i = 0; i < (path.Count - 1); i++)
             {
                 Tuple<string, string, double> node = null;
                 node = _conversionRates.Where(x => x.Item1 == path[i] && x.Item2 == path[i + 1]).FirstOrDefault();
@@ -63,7 +64,7 @@ namespace Currency.Services
                 {
                     rate = node.Item3 * rate;
                 }
-                
+
             }
 
             return rate * amount;
@@ -76,8 +77,8 @@ namespace Currency.Services
                 Tuple.Create("USD", "CAD", 1.34),
                 Tuple.Create("CAD", "GBP", 0.58),
                 Tuple.Create("USD", "EUR", 0.86),
-                Tuple.Create("CAD", "RIR", 33561.29),
-                Tuple.Create("EUR", "RUB", 65.46)
+                Tuple.Create("CAD", "JPY", 106.86),
+                Tuple.Create("EUR", "CHF", 105.00)
             };
         }
     }

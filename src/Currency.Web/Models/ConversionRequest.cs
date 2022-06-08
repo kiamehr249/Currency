@@ -1,4 +1,4 @@
-﻿namespace Currency.Services
+﻿namespace Currency.Web.Models
 {
     public class ConversionRequest
     {

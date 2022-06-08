@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Currency.Services
 {
-    public class GraphProcess : IGraphProcess
+    public class GraphProcessing : IGraphProcessing
     {
         public HashSet<string> VisitNodes(Graph graph, string start)
         {
@@ -42,7 +42,6 @@ namespace Currency.Services
                 };
             }
 
-
             var previous = new Dictionary<string, string>();
 
             var queue = new Queue<string>();
@@ -63,8 +62,9 @@ namespace Currency.Services
 
             return v => {
                 var path = new List<string> { };
-
+                
                 var current = v;
+
                 while (!current.Equals(start))
                 {
                     path.Add(current);
