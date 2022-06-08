@@ -1,0 +1,65 @@
+﻿@using Currency.Services;
+@model ConversionRequest
+@{
+    ViewData["Title"] = "Home Page";
+    var content = (double)ViewBag.Content;
+}
+
+<div class="container">
+    <h1 class="display-4 text-center">Exchange Currencies</h1>
+    <br />
+    <div class="row">
+        <div class="col-md-8 offset-2">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form action="/" method="post">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Currency 1</label>
+                                    @Html.TextBoxFor(m => m.From, new { @class = "form-control", @placeholder = "USD..." })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Currency 2</label>
+                                    @Html.TextBoxFor(m => m.To, new { @class = "form-control", @placeholder = "EUR..." })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    @Html.TextBoxFor(m => m.Amount, new { @class = "form-control", @placeholder = "00.0" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mt-4 pt-2">
+                                    <button type="submit" class="btn btn-outline-dark">Change</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-2">
+                <div class="card shadow">
+                    <div class="card-body">
+                        @if (Model.HasError)
+                        {
+                            <div class="alert alert-danger">
+                                <h4>Something went wrong, Check the input values! If they are Ok, Sorry There is not enough information in the list</h4>
+                            </div>
+                        }
+                        else
+                        {
+                            <h1>@content @Model.To</h1>
+                        }
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
